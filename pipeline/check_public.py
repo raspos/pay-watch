@@ -62,6 +62,45 @@ def check_est(site: Path, fails: list) -> None:
         fails.append(f"급여 정합성 보류 기업 {len(bad)}곳의 추정이 공개됨 예 {bad[:3]}")
 
 
+def check_rank(site: Path, fails: list) -> None:
+    """PAY RANK 공개 데이터(data/rank/rank.json): 대표값 규칙과 같은 출처만(DART 유효값 → 사람인), 보류된 공시값 없음, 최소 필드만."""
+    f = site / "data/rank/rank.json"
+    if not f.exists():
+        fails.append("data/rank/rank.json 없음(pipeline/build_rank.py)")
+        return
+    d = json.loads(f.read_text(encoding="utf-8"))
+    if set(d) != {"v", "inds", "rows"}:
+        fails.append("rank.json 최상위 필드 이상")
+        return
+    ok = set(json.loads((site / "data/finder/dart_only.json").read_text(encoding="utf-8")))
+    for p in (site / "data/corp").glob("*.json"):
+        for code, r in json.loads(p.read_text(encoding="utf-8")).items():
+            if r.get("dart") and r["dart"].get("level") == "ok" and r["dart"].get("avg"):
+                ok.add(code)
+    sm = set()
+    for p in (site / "data/pay/s").glob("*.json") if (site / "data/pay/s").exists() else []:
+        sm |= set(json.loads(p.read_text(encoding="utf-8")))
+    known = {r[0] for r in json.loads((site / "data/finder/entities.json").read_text(encoding="utf-8"))}
+    seen = set()
+    for r in d["rows"]:
+        rid, _, pay, src, yr, ind, hold = r
+        if len(r) != 7 or rid in seen or rid not in known or not isinstance(pay, int) or pay <= 0 or ind < -1 or ind >= len(d["inds"]) or hold not in (0, 1):
+            fails.append(f"rank.json 행 형식 이상: {rid}")
+            return
+        seen.add(rid)
+        if src == 0 and rid not in ok:
+            fails.append(f"rank.json: 유효하지 않은(보류·없음) DART 값이 순위 데이터에 있음 {rid}")
+            return
+        if src == 1 and (rid not in sm or rid in ok):
+            fails.append(f"rank.json: 사람인 값 출처 이상 {rid}")
+            return
+        if src not in (0, 1):
+            fails.append(f"rank.json: 출처 코드 이상 {rid}")
+            return
+    if any(rid in ok and rid not in seen for rid in ok):
+        fails.append("rank.json: 유효한 DART 공시 기업이 빠져 있음")
+
+
 def main() -> int:
     fails: list[str] = []
     files = [p for p in SITE.rglob("*") if p.is_file()]
@@ -134,6 +173,7 @@ def main() -> int:
         if not sm_ok:
             blocked = True
     check_est(SITE, fails)
+    check_rank(SITE, fails)
     # 정책 설정
     cfg = CFG.read_text(encoding="utf-8")
     if not (SITE / "robots.txt").exists():

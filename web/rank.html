@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>내 친구들 연봉 랭킹 | PAY워치 PAY RANK</title>
+<meta name="description" content="우리 중 누가 제일 잘 버는 회사에 다닐까? 친구들이 다니는 회사의 평균연봉으로 순위를 만들고 이미지·링크로 공유하세요. 친구 개인의 연봉이 아닌 회사 평균연봉 기준입니다.">
+<meta property="og:site_name" content="내 친구는 얼마 벌까? | PAY워치">
+<meta property="og:title" content="내 친구들 연봉 랭킹 | PAY RANK">
+<meta property="og:description" content="우리 중 누가 제일 잘 버는 회사에 다닐까?">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2317181a'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='700' text-anchor='middle' fill='%23fafaf8'%3EPW%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/rank.css">
+</head>
+<body>
+<main id="main"><div class="wrap rk">
+  <h1 class="rk-title">내 친구들 연봉 랭킹</h1>
+  <p class="rk-sub">우리 중 누가 제일 잘 버는 회사에 다닐까?</p>
+  <p class="rk-disc">친구 개인의 연봉이 아닌 재직 회사의 평균연봉 기준입니다.</p>
+
+  <div class="rk-tabs" role="tablist" aria-label="PAY RANK 메뉴">
+    <button type="button" role="tab" id="tab-f" aria-controls="view-f" aria-selected="true">친구들 랭킹</button>
+    <button type="button" role="tab" id="tab-c" aria-controls="view-c" aria-selected="false" tabindex="-1">기업별 순위</button>
+    <button type="button" role="tab" id="tab-i" aria-controls="view-i" aria-selected="false" tabindex="-1">업종별 순위</button>
+  </div>
+
+  <section id="view-f" role="tabpanel" aria-labelledby="tab-f">
+    <div id="rk-friends"></div>
+    <div class="rk-actions">
+      <button type="button" id="btn-add" class="rk-btn">+ 친구 추가</button>
+      <button type="button" id="btn-make" class="rk-btn primary">친구들 연봉 랭킹 만들기</button>
+    </div>
+    <p id="rk-msg" class="rk-msg" role="status" aria-live="polite"></p>
+    <section id="rk-result" class="rk-result" aria-live="polite" hidden></section>
+  </section>
+
+  <section id="view-c" role="tabpanel" aria-labelledby="tab-c" hidden>
+    <div class="rk-basis" role="group" aria-label="순위 기준">
+      <button type="button" data-basis="dart" aria-pressed="true">DART 공시 기준</button>
+      <button type="button" data-basis="all" aria-pressed="false">사람인 추정 포함(참고)</button>
+    </div>
+    <div class="rk-field"><label class="vh" for="c-input">기업 검색</label><input id="c-input" type="search" autocomplete="off" placeholder="기업 이름 (초성 가능: ㅅㅅ)"><ul class="rk-list" id="c-list" role="listbox" hidden></ul></div>
+    <div id="c-out" aria-live="polite"></div>
+  </section>
+
+  <section id="view-i" role="tabpanel" aria-labelledby="tab-i" hidden>
+    <div class="rk-basis" role="group" aria-label="순위 기준">
+      <button type="button" data-basis="dart" aria-pressed="true">DART 공시 기준</button>
+      <button type="button" data-basis="all" aria-pressed="false">사람인 추정 포함(참고)</button>
+    </div>
+    <div class="rk-field"><label for="i-select" class="rk-lab">업종</label><select id="i-select"></select></div>
+    <div id="i-out" aria-live="polite"></div>
+  </section>
+</div></main>
+<script defer src="js/vendor/fuse.min.js"></script>
+<script type="module" src="js/rank-app.js"></script>
+</body>
+</html>

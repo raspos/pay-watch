@@ -12,12 +12,21 @@ export function normalize(s) {
   return String(s ?? "").normalize("NFKC").toLowerCase().replace(MARKS, "").replace(/[^0-9a-zㄱ-ㆎ가-힣]/g, "");
 }
 
+const CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+/** 한글 초성 추출(한글 음절만 초성으로 바꾸고 나머지는 그대로). 초성 검색('ㅅㅅ' → 삼성)에 쓴다. */
+export function chosung(s) {
+  let o = "";
+  for (const ch of String(s ?? "")) { const c = ch.charCodeAt(0) - 0xac00; o += c >= 0 && c <= 11171 ? CHO[Math.floor(c / 588)] : ch; }
+  return o;
+}
+const JAMO_ONLY = /^[ㄱ-ㅎ]+$/;
+
 export function buildFinder(rows) {
   return rows.map(r => {
     const aliases = r[3] ? r[3].split(";").filter(Boolean) : [];
     const display = r[2] || "";
     return { code: r[0], legal: r[1], display, aliases, flags: r[4], size: r[5] || 0,
-      nl: normalize(r[1]), nd: normalize(display), na: aliases.map(normalize).filter(Boolean) };
+      nl: normalize(r[1]), nd: normalize(display), na: aliases.map(normalize).filter(Boolean), cl: chosung(normalize(r[1])), cd: chosung(normalize(display)) };
   });
 }
 
@@ -41,8 +50,15 @@ function tierOf(e, q) {
 }
 
 export function searchFinder(list, query, limit = 8) {
-  const q = normalize(query);
+  const raw = String(query ?? "").replace(/\s+/g, "");
+  const q = JAMO_ONLY.test(raw) ? raw : normalize(query);                    // 초성은 NFKC 정규화가 호환 자모를 바꿔 버리므로 정규화 전에 판별
   if (!q) return { results: [], fuzzy: 0 };
+  if (JAMO_ONLY.test(q)) {                                                    // 초성 검색: 표시명·정식 명칭의 초성 접두 → 부분 일치, 같은 순위에서는 규모순
+    const hits = [];
+    for (const e of list) { const keys = [e.cd, e.cl].filter(Boolean); const t = keys.some(k => k.startsWith(q)) ? 1 : keys.some(k => k.includes(q)) ? 2 : 9; if (t < 9) hits.push([t, e]); }
+    hits.sort((a, b) => a[0] - b[0] || b[1].size - a[1].size || (a[1].code < b[1].code ? -1 : 1));
+    return { results: hits.slice(0, limit).map(h => ({ ...h[1], tier: h[0] })), fuzzy: 0 };
+  }
   const hits = [];
   for (const e of list) { const t = tierOf(e, q); if (t < 9) hits.push([t, e]); }
   hits.sort((a, b) => a[0] - b[0] || b[1].size - a[1].size || (a[1].code < b[1].code ? -1 : 1));

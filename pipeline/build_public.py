@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PY = [sys.executable, "-I", "-X", "utf8"]
-for step in ("build_site.py", "apply_public_policy.py", "build_saramin.py", "export_est_public.py", "build_finder.py", "check_public.py"):
+for step in ("build_site.py", "apply_public_policy.py", "build_saramin.py", "export_est_public.py", "build_finder.py", "build_rank.py", "check_public.py"):
     print("==", step)
     r = subprocess.run(PY + [str(ROOT / "pipeline" / step)], cwd=ROOT)
     if r.returncode == 2 and step == "check_public.py":      # 사람인 게시 권한 미확인: 빌드는 끝났지만 배포는 차단된다(정상 동작)
