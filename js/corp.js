@@ -1,6 +1,6 @@
 // 법인(회사) 뷰: 공시 1인 평균급여(DART, 파생값)와 국민연금 추정(확인된 사업장 합산)을 별도 카드로 구분해 보여준다.
-import { pickRepresentative, visibleDartAvg } from "./pay-source.js?v=9cecb8f822";
-import { avatar, barChart, capAnnual, esc, fmtInt, fmtMan, fmtPct, gauge, getJSON, histogram, last, lineChart, sparkline, ymShort } from "./common.js?v=9cecb8f822";
+import { pickRepresentative, visibleDartAvg } from "./pay-source.js?v=375f4d5dac";
+import { avatar, barChart, capAnnual, esc, fmtInt, fmtMan, fmtPct, gauge, getJSON, histogram, last, lineChart, sparkline, ymShort } from "./common.js?v=375f4d5dac";
 
 export async function getCorp(code) {
   const sh = await getJSON(`corp/${Number(code) % 128}.json`);
