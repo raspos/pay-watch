@@ -151,7 +151,7 @@ body.home main>.wrap{width:100%}
 .res-actions a{display:inline-block;padding:10px 16px;min-height:var(--tap);border:1px solid var(--field);border-radius:var(--radius);color:var(--ink);font-weight:700;text-decoration:none}
 details.more{border-top:1px solid var(--line);margin-top:var(--space-5);padding:var(--space-3) 0}
 details.more>summary{cursor:pointer;font-weight:700;padding:var(--space-2) 0;min-height:var(--tap)}
-.env{display:block;width:clamp(150px,44vw,200px);height:auto;margin:var(--space-5) auto 0}
+.env{display:block;width:clamp(150px,42vw,190px);height:auto;margin:var(--space-5) auto 0;border-radius:10px}
 @media (max-width:560px){
   .pairbars{grid-template-columns:4.4rem minmax(0,1fr) 4.8rem;gap:var(--space-2)}
   .pairbars .pl{font-size:.75rem;line-height:1.3}

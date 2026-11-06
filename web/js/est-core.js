@@ -1,4 +1,4 @@
-// PAY WATCH LAB 실험적 추정 — 순수 로직(DOM 없음, node --test 로 검증). 이 파일은 코드만 두며 데이터는 포함하지 않는다.
+// 근속 구간별 추정 — 순수 로직(DOM 없음, node --test 로 검증). 이 파일은 코드만 두며 데이터는 포함하지 않는다.
 // 값은 연구 결과(만원 정수, 연환산 집단 평균급여)를 그대로 쓴다. 결과가 없는 값(null)에는 어떤 금액도 만들지 않는다.
 export const BINS = ["1년미만", "1~3년미만", "3~5년미만", "5~10년미만", "10년이상"];
 export const BIN_LABEL = ["1년 미만", "1~3년", "3~5년", "5~10년", "10년 이상"];
@@ -19,7 +19,7 @@ export function fmtRange(r) {
 export const relWidth = r => (r ? (r[1] - r[0]) / ((r[1] + r[0]) / 2) : null);
 export const isWide = r => (r ? relWidth(r) > WIDE : false);
 
-// ---- 공개 적합성 등급(PHASE 12)별 표시 방식. 등급은 정확도가 아니라 공개 적합성이다. 새 임계값 없음 ----
+// ---- 기업별 표시 방식(범위를 표시해도 되는 기업만). 새 임계값 없음 ----
 // A 범위 / B 범위 + 짧은 민감도 안내 / C 공시 평균급여만(범위 없음) / D 급여 값 없음(이유만)
 export const gradeOf = rec => (rec && ["A", "B", "C", "D"].includes(rec.g) ? rec.g : "D");
 export const displayMode = rec => ({ A: "range", B: "range", C: "pay", D: "none" })[gradeOf(rec)];
@@ -46,9 +46,9 @@ export const STATUS_LABEL = { CALCULATED: "계산됨", SENSITIVE: "가정·기�
 export function resolveBin(rec, bin) {
   if (!canEstimate(rec)) return { kind: "na" };
   const base = rec.b[bin], exp = rec.x ? rec.x[bin] : null;
-  return { kind: "range", base, exp, held: !!rec.h, baseWide: isWide(base), expWide: isWide(exp), baseW: relWidth(base), expW: relWidth(exp) };
+  return { kind: "range", base, exp, held: !!(rec.h ?? rec.x == null), baseWide: isWide(base), expWide: isWide(exp), baseW: relWidth(base), expW: relWidth(exp) };
 }
-export const canEstimate = rec => !!(rec && rec.b && displayMode(rec) === "range");
+export const canEstimate = rec => !!(rec && rec.b && (rec.g === undefined || displayMode(rec) === "range"));   // 공개 데이터는 A·B 기업만 담고 등급 필드가 없다(범위가 있으면 표시 대상)
 
 // ---- 그래프 좌표: 5개 구간별 막대(구간 사이를 잇지 않는다), 세로축은 0에서 시작하지 않을 수 있다 ----
 function niceStep(raw) {

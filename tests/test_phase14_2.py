@@ -83,13 +83,13 @@ def run_check(cfg_text, tmp_path):
 
 
 def test_permission_gate_blocks_deploy_until_confirmed(tmp_path):
-    base = "publish_experimental: false\nsaramin_in_site: true\ncontact: null\n"
+    base = "publish_estimates: true\nsaramin_in_site: true\ncontact: null\n"
     blocked = run_check(base + "saramin_permission: unconfirmed\n", tmp_path)
     assert blocked.returncode == 2 and "배포 차단" in blocked.stdout and "실패 0건" in blocked.stdout                   # 권한 미확인: 데이터 누출은 없지만 배포 차단
     assert run_check(base + "saramin_permission: confirmed\n", tmp_path).returncode == 0
-    off = run_check("publish_experimental: false\nsaramin_in_site: false\nsaramin_permission: unconfirmed\ncontact: null\n", tmp_path)
+    off = run_check("publish_estimates: true\nsaramin_in_site: false\nsaramin_permission: unconfirmed\ncontact: null\n", tmp_path)
     assert off.returncode == 1 and "saramin_in_site=false" in off.stdout                                           # 제외 설정인데 파일이 남아 있으면 실패
-    assert run_check("publish_experimental: true\nsaramin_in_site: true\nsaramin_permission: confirmed\n", tmp_path).returncode == 1
+    assert run_check("publish_estimates: false\nsaramin_in_site: true\nsaramin_permission: confirmed\n", tmp_path).returncode == 1      # 추정 비공개 설정인데 est 파일이 있으면 실패
 
 
 def test_exporter_reads_the_exclusion_setting(tmp_path):

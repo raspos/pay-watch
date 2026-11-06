@@ -12,7 +12,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 WM = ROOT / "reports/wage_model"
 PREV = ROOT / "preview"
-need = [WM / "phase12_ranges_rawprecision.csv", WM / "phase10_shape_estimates.csv", WM / "phase9_group_a_quality.csv", ROOT / "data/raw/dart/cache", ROOT / "pipeline/build_preview.py", ROOT / "web_exp/js/exp-section.js"]
+need = [WM / "phase12_ranges_rawprecision.csv", WM / "phase10_shape_estimates.csv", WM / "phase9_group_a_quality.csv", ROOT / "data/raw/dart/cache", ROOT / "pipeline/build_preview.py", ROOT / "web/js/est-section.js"]
 pytestmark = pytest.mark.skipif(not all(p.exists() for p in need), reason="연구 산출물 없음")
 BINS = ["1년미만", "1~3년미만", "3~5년미만", "5~10년미만", "10년이상"]
 
@@ -128,10 +128,7 @@ def test_public_site_has_no_experimental_assets(built):
             txt = p.read_text(encoding="utf-8", errors="ignore")
             assert "PAY WATCH LAB 실험적 추정" not in txt and "exp.html" not in txt and "LAB 실험" not in txt, p
     assert "exp.html" not in (site / "js/common.js").read_text(encoding="utf-8")
-    assert list(site.glob("*.html")) and all("exp-embed" not in p.read_text(encoding="utf-8") for p in site.glob("*.html"))
-    # PHASE 14: 별도 '연구용 검색' 화면·메뉴는 없고, 미리보기의 결과 화면(index·company)에만 연구용 로더가 붙는다
-    assert not (PREV / "exp.html").exists() and "LAB 실험" not in (PREV / "js/common.js").read_text(encoding="utf-8")
-    assert "exp-embed" in (PREV / "company.html").read_text(encoding="utf-8") and "exp-embed" in (PREV / "index.html").read_text(encoding="utf-8")
+    assert not (PREV / "exp.html").exists() and "LAB 실험" not in (PREV / "js/common.js").read_text(encoding="utf-8")      # 별도 연구용 검색 화면·메뉴 없음
 
 
 def test_preview_differs_from_site_only_by_experimental_additions(built):
@@ -141,17 +138,6 @@ def test_preview_differs_from_site_only_by_experimental_additions(built):
         rel = p.relative_to(PREV).as_posix()
         if rel.startswith("data/exp/") or rel in allowed: continue
         assert (ROOT / "site" / rel).read_bytes() == p.read_bytes(), rel
-
-
-def test_web_exp_contains_only_code_and_no_banned_phrases():
-    files = [p for p in (ROOT / "web_exp").rglob("*") if p.is_file()]
-    assert files and all(p.suffix in (".html", ".js", ".css") for p in files)
-    for p in files:
-        t = p.read_text(encoding="utf-8")
-        for bad in ("예상 적중률", "95% 신뢰구간", "실제 연봉 범위"):
-            assert bad not in t, (p, bad)
-    gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
-    assert "preview/" in gi and "phase*_estimates.csv" in gi
 
 
 def test_existing_lab_assets_untouched(built):

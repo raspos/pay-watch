@@ -53,8 +53,9 @@ def test_representative_pay_count_matches_finder_flags_and_excludes_nps_estimate
 
 def test_finder_entities_are_unique_codes_with_alias_dictionary_only_for_verified_rows():
     rows = json.loads((SITE / "data/finder/entities.json").read_text(encoding="utf-8"))
-    assert len(rows) == 3912 and len({r[0] for r in rows}) == 3912 and all(re.fullmatch(r"\d{8}", r[0]) for r in rows)
-    aliased = [r for r in rows if r[2]]
+    dart = [r for r in rows if re.fullmatch(r"\d{8}", r[0])]                                  # PHASE 14.2 이후: DART 3,912 + 사람인 전용 1,551(별도 id)
+    assert len(rows) == 5463 and len({r[0] for r in rows}) == 5463 and len(dart) == 3912
+    aliased = [r for r in dart if r[2]]
     assert len(aliased) == 39
     names = {r[0]: r[1] for r in rows}
     import csv
@@ -62,10 +63,12 @@ def test_finder_entities_are_unique_codes_with_alias_dictionary_only_for_verifie
         assert names[r["dart_code"]] == r["legal_name"]           # 법적 명칭 원본 보존, 식별자 불변
 
 
-def test_no_saramin_or_research_data_in_public_site_and_publish_gate_closed():
+def test_public_site_has_no_internal_research_data_and_publish_settings_are_explicit():
     cfg = (ROOT / "config/publish.yaml").read_text(encoding="utf-8")
-    assert re.search(r"^publish_experimental:\s*false", cfg, re.M)
-    assert not any("saramin" in p.name.lower() for p in SITE.rglob("*") if p.is_file())
+    assert re.search(r"^publish_estimates:\s*true", cfg, re.M) and re.search(r"^saramin_permission:\s*confirmed", cfg, re.M)     # 공개 결정은 명시적 설정(2026-11-07 소유자 결정)
+    assert (ROOT / "config/saramin_permission_evidence.md").exists()
     for p in (SITE / "data").rglob("*.json"):
-        assert "saramin" not in p.read_text(encoding="utf-8").lower(), p
-    assert (SITE / "robots.txt").exists()
+        t = p.read_text(encoding="utf-8")
+        for bad in ("saramin.co.kr", "csn=", "match_evidence", "quality_status", "phase12", "형태실험"):
+            assert bad not in t, (p, bad)                                                       # 사람인 원본 URL·내부 매칭/품질 필드·연구 산출물 이름 없음
+    assert not (SITE / "data/exp").exists() and (SITE / "robots.txt").exists()

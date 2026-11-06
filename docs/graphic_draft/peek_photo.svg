@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 377" width="360" height="377">
+<defs>
+<linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9806a"/><stop offset=".25" stop-color="#d9a287"/><stop offset=".7" stop-color="#e8b79d"/><stop offset="1" stop-color="#d9a085"/></linearGradient>
+<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4e8bf"/><stop offset="1" stop-color="#d8c385"/></linearGradient>
+<linearGradient id="paperDark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cdb77a"/><stop offset="1" stop-color="#a99356"/></linearGradient>
+<radialGradient id="iris" cx=".42" cy=".4" r=".7"><stop offset="0" stop-color="#7a4a22"/><stop offset=".55" stop-color="#4a2a12"/><stop offset="1" stop-color="#2a1608"/></radialGradient>
+<clipPath id="hole"><path d="M112 66 L132 48 L168 60 L196 72 L238 84 L262 104 L280 134 L286 160 L300 206 L282 214 L276 240 L252 252 L222 270 L190 282 L168 258 L150 252 L118 238 L102 232 L100 180 L108 120 Z"/></clipPath>
+</defs>
+<rect width="360" height="377" rx="10" fill="#66686b"/>
+<!-- 벽에 드리운 그림자 -->
+<path d="M96 70 L120 40 L210 66 L300 110 L306 214 L270 270 L190 292 L96 244 Z" fill="#505255" opacity=".55"/>
+<!-- 구멍 안: 피부와 눈 -->
+<g clip-path="url(#hole)">
+  <rect x="90" y="40" width="230" height="260" fill="url(#skin)"/>
+  <!-- 구멍 위쪽 그늘 -->
+  <path d="M100 40 L300 40 L300 108 C250 92 190 84 130 108 L100 128 Z" fill="#4a2f22" opacity=".62"/>
+  <!-- 눈썹 아래 눈두덩 -->
+  <path d="M104 118 C150 88 214 96 262 130 C236 114 180 108 130 126 Z" fill="#8a5a46" opacity=".55"/>
+  <g transform="translate(-52 -40) scale(1.31)">
+  <!-- 흰자 -->
+  <path d="M112 146 C140 120 196 114 232 138 C204 164 148 170 112 146 Z" fill="#f3ece6"/>
+  <path d="M112 146 C140 126 196 120 232 138 C204 156 148 162 112 146 Z" fill="#efe2d8"/>
+  <!-- 홍채·동공 -->
+  <circle cx="170" cy="132" r="22" fill="url(#iris)"/>
+  <circle cx="170" cy="132" r="9" fill="#120a05"/>
+  <ellipse cx="178" cy="124" rx="5.2" ry="4" fill="#fff" opacity=".95"/>
+  <circle cx="162" cy="140" r="2" fill="#fff" opacity=".5"/>
+  <!-- 윗눈꺼풀 라인과 속눈썹 -->
+  <path d="M110 148 C140 118 198 112 240 140" fill="none" stroke="#1d0f08" stroke-width="5" stroke-linecap="round"/>
+  <path d="M214 124 L246 134 M222 120 L252 124 M204 120 L230 114" stroke="#1d0f08" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
+  <path d="M112 148 C146 172 204 170 240 142" fill="none" stroke="#9c5f4a" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
+  <!-- 아래눈꺼풀 주름 -->
+  <path d="M120 170 C160 190 214 184 252 158" fill="none" stroke="#b97d66" stroke-width="2.2" opacity=".6"/>
+  <path d="M130 186 C170 206 226 198 262 170" fill="none" stroke="#c28b74" stroke-width="1.6" opacity=".45"/>
+  </g>
+</g>
+<!-- 구멍의 찢어진 안쪽 가장자리(어두운 선) -->
+<path d="M112 66 L132 48 L168 60 L196 72 L238 84 L262 104 L280 134 L286 160 L300 206 L282 214 L276 240 L252 252 L222 270 L190 282 L168 258 L150 252 L118 238 L102 232 L100 180 L108 120 Z" fill="none" stroke="#3b2a20" stroke-width="2.4" stroke-linejoin="round" opacity=".85"/>
+<!-- 말려 일어난 종이 조각들 -->
+<g stroke="#8b7a49" stroke-width="1.4" stroke-linejoin="round">
+  <!-- 위 왼쪽 -->
+  <path d="M130 40 L190 34 L196 56 L188 64 L142 58 Z" fill="url(#paper)"/>
+  <path d="M142 58 L188 64 L196 56 L190 34 Z" fill="url(#paperDark)" opacity=".35" stroke="none"/>
+  <!-- 위 오른쪽(작은 삼각) -->
+  <path d="M234 62 L258 54 L284 112 L262 100 L246 84 Z" fill="url(#paper)"/>
+  <path d="M258 54 L284 112 L276 118 L252 70 Z" fill="url(#paperDark)" opacity=".5" stroke="none"/>
+  <!-- 왼쪽 -->
+  <path d="M64 120 L98 118 L112 172 L72 164 L62 144 Z" fill="url(#paper)"/>
+  <path d="M98 118 L112 172 L100 170 Z" fill="url(#paperDark)" opacity=".5" stroke="none"/>
+  <!-- 아래 왼쪽(큰 조각) -->
+  <path d="M42 292 L112 252 L152 268 L128 322 L108 332 L48 342 Z" fill="url(#paper)"/>
+  <path d="M112 252 L152 268 L128 322 L96 300 Z" fill="url(#paperDark)" opacity=".4" stroke="none"/>
+  <path d="M42 292 L112 252" stroke="#fff6d8" stroke-width="2" opacity=".6"/>
+  <!-- 아래 오른쪽 -->
+  <path d="M222 286 L282 232 L288 262 L242 300 Z" fill="url(#paper)"/>
+  <path d="M282 232 L288 262 L270 258 Z" fill="url(#paperDark)" opacity=".5" stroke="none"/>
+</g>
+</svg>

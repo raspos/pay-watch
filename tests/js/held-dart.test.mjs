@@ -10,9 +10,9 @@ import { fromCorp, evaluateAll } from "../../web/js/compare-core.js";
 
 const root = new URL("../../", import.meta.url);
 const dir = mkdtempSync(join(tmpdir(), "heldsec-"));
-for (const f of ["web_exp/js/exp-section.js", "web_exp/js/exp-core.js", "web/js/common.js", "web/js/site-config.js"]) cpSync(new URL(f, root), join(dir, f.split("/").pop()));
-const sec = await import(pathToFileURL(join(dir, "exp-section.js")).href);
-const core = await import(pathToFileURL(join(dir, "exp-core.js")).href);
+for (const f of ["web/js/est-section.js", "web/js/est-core.js", "web/js/common.js", "web/js/site-config.js"]) cpSync(new URL(f, root), join(dir, f.split("/").pop()));
+const sec = await import(pathToFileURL(join(dir, "est-section.js")).href);
+const core = await import(pathToFileURL(join(dir, "est-core.js")).href);
 
 const HELD_AVG = 74090000;                                           // 보류된 공시 평균급여(예시값)
 const OK = { avg: 153628246, level: "ok", fy: 2025 }, HELD = { avg: HELD_AVG, level: "caution", fy: 2025, consistency: 0.2 };
@@ -48,6 +48,14 @@ test("화면 소스: 결과 화면은 d.avg 를 직접 쓰지 않고, 연구용 
   const corp = readFileSync(new URL("web/js/corp.js", root), "utf8");
   assert.ok(!/\bd\.avg\b/.test(corp));                                                         // 모든 공시 숫자는 visibleDartAvg 를 거친 dv
   assert.ok(corp.includes("const pair = (dartOk && n.est != null)") && corp.includes("visibleDartAvg(c)"));
-  const company = readFileSync(new URL("web/js/company.js", root), "utf8"), embed = readFileSync(new URL("web_exp/js/exp-embed.js", root), "utf8");
-  assert.ok(company.includes('dartOk: !!(c.dart && c.dart.level === "ok")') && embed.includes("__pwResult") && embed.includes("dartOk"));
+  const company = readFileSync(new URL("web/js/company.js", root), "utf8"), embed = readFileSync(new URL("web/js/est-embed.js", root), "utf8");
+  assert.ok(company.includes('dartOk: !!(c.dart && c.dart.level === "ok")') && embed.includes("__pwResult") && embed.includes("dartAvg"));
+});
+
+test("공개 추정 데이터에는 기업 평균(a)이 없고, 결과 화면이 넘긴 보여도 되는 DART 평균만 기준선이 된다", () => {
+  const rec = { b: [[3000, 4000], [4500, 5200], [5000, 6000], [6300, 7200], [8000, 9000]], x: null, cau: 1 };
+  assert.equal(sec.effectiveRec(rec, { dartAvgMan: null }).a, null);                          // 보류·없음: 기준선 없음
+  assert.equal(sec.effectiveRec(rec, { dartAvgMan: 7000 }).a, 7000);                          // 정상: 표시 가능한 공시 평균(만원)
+  assert.ok(core.canEstimate(rec) && core.chartModel(sec.effectiveRec(rec, { dartAvgMan: null }), 3).avgY === null);   // 등급 필드 없는 공개 레코드도 표시 대상
+  assert.equal(core.canEstimate({ cau: 0 }), false);                                          // 범위 없는 레코드는 영역을 그리지 않는다
 });

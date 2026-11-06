@@ -4,7 +4,7 @@
 - 기업별 근속 추정 범위·내부 품질 등급·사람인 데이터·연구용 문구가 없다.
 - 공개 데이터 정책: 공시 급여 원자료의 정합성이 확인되지 않은 기업만 보류하고, 모형 품질만 문제인 기업의 공시값은 숨기지 않는다. 평균근속 45년 초과는 공개하지 않는다.
 - 통합 검색 색인은 이름·식별자·자료 유무 표시만 담는다.
-- config/publish.yaml 의 publish_experimental 이 false 다(true 로 바꾸면 이 검사가 실패하며, 별도 단계에서 구현·검증해야 한다).
+- 공개 추정 데이터(data/est)는 publish_estimates=true 일 때만 존재하며 최소 필드(b,x,cau,w)만 담는다(내부 등급 글자·공시 평균 없음).
 실행: python -I -X utf8 pipeline/check_public.py"""
 import json
 import os
@@ -23,6 +23,33 @@ BAD_TEXT = ["PAY WATCH LAB 실험적 추정", "LAB 실험", "data/exp", "exp-emb
 BAD_DATA_TEXT = ["공개 적합성", "형태실험", "[신규]", "phase12", "exp_range", "saramin.co.kr", "SARAMIN_", "csn=", "match_evidence", "quality_status", "saramin_company_id", "paywatch_integrated"]    # 사람인 원본 URL·내부 매칭/품질 필드·통합 데이터셋 이름이 공개 데이터에 있으면 안 된다
 
 
+EST_ON = re.search(r"^publish_estimates:\s*true", CFG.read_text(encoding="utf-8"), re.M) is not None
+
+
+def check_est(site: Path, fails: list) -> None:
+    """공개 추정 데이터(data/est): 설정이 켜져 있을 때만 존재, 최소 필드만, 범위 형식·포함 관계 정상, DART 코드 형식."""
+    est = site / "data/est"
+    if not est.exists():
+        if EST_ON:
+            fails.append("publish_estimates=true 인데 data/est 가 없음(pipeline/export_est_public.py)")
+        return
+    if not EST_ON:
+        fails.append("publish_estimates=false 인데 data/est 파일이 site/ 에 있음")
+        return
+    n = 0
+    for f in (est / "s").glob("*.json"):
+        for code, r in json.loads(f.read_text(encoding="utf-8")).items():
+            n += 1
+            ok = re.fullmatch(r"\d{8}", code) and set(r) <= {"b", "x", "cau", "w"} and {"b", "cau"} <= set(r)
+            rng = lambda v: isinstance(v, list) and len(v) == 5 and all(isinstance(t, list) and len(t) == 2 and all(isinstance(u, int) for u in t) and 0 < t[0] <= t[1] for t in v)
+            ok = ok and rng(r["b"]) and (r.get("x") is None or (rng(r["x"]) and all(x[0] <= b[0] and x[1] >= b[1] for x, b in zip(r["x"], r["b"]))))
+            if not ok:
+                fails.append(f"공개 추정 데이터 형식 이상(허용 필드 b,x,cau,w 외 포함·범위 이상): {code}")
+                return
+    if n == 0:
+        fails.append("공개 추정 데이터가 비어 있음")
+
+
 def main() -> int:
     fails: list[str] = []
     files = [p for p in SITE.rglob("*") if p.is_file()]
@@ -32,7 +59,7 @@ def main() -> int:
             fails.append(f"연구용으로 보이는 파일 이름: {rel}")
         if p.suffix in (".html", ".js", ".css", ".json", ".txt", ".md", ".csv"):
             t = p.read_text(encoding="utf-8", errors="ignore")
-            for bad in BAD_TEXT:
+            for bad in [b for b in BAD_TEXT if not (EST_ON and b == "실험적 추정")]:      # 추정 영역을 공개하는 설정이면 화면 라벨 '실험적 추정'은 허용
                 if bad in t:
                     fails.append(f"{rel}: 연구용 표식 '{bad}'")
             if rel.startswith("data/"):
@@ -94,10 +121,9 @@ def main() -> int:
                     break
         if not sm_ok:
             blocked = True
+    check_est(SITE, fails)
     # 정책 설정
     cfg = CFG.read_text(encoding="utf-8")
-    if re.search(r"^publish_experimental:\s*true", cfg, re.M):
-        fails.append("publish_experimental=true: 공개 빌드는 연구용 추정을 지원하지 않는다(별도 단계에서 구현·검증 필요)")
     if not (SITE / "robots.txt").exists():
         fails.append("robots.txt 없음")
     print(f"공개 검사: 파일 {len(files)}개, 실패 {len(fails)}건")

@@ -5,6 +5,7 @@ import { searchTop } from "./search.js";
 import { getCorp, renderCorp, renderEntity } from "./corp.js";
 import { loadEntities } from "./finder-ui.js";
 import { getSaramin } from "./saramin.js";
+import { visibleDartAvg } from "./pay-source.js";
 
 chrome("");
 mountFinder(document.getElementById("search"), { placeholder: "회사 이름을 검색하세요", label: "회사 검색", nps: async q => (await searchTop(q, 6)).list,
@@ -27,13 +28,13 @@ const id = q.get("id"), corp = q.get("corp"), view = q.get("view"), sm = q.get("
     const c = await getCorp(corp);
     if (!c) {                                            // 상세 페이지가 없는 기업: 검색 색인의 이름으로 '자료 없음' 결과를 보여준다
       const e = /^\d{8}$/.test(corp) ? (await loadEntities()).find(x => x.code === corp) : null;
-      if (e) { document.title = `${e.display || e.legal} | 내 친구는 얼마벌까?`; const only = await getJSON("finder/dart_only.json").catch(() => ({})); renderEntity(e, app, { dart: only[corp] || null, saramin: await getSaramin(corp) }); window.dispatchEvent(new CustomEvent("pw:result", { detail: { code: corp } })); return; }
+      if (e) { document.title = `${e.display || e.legal} | 내 친구는 얼마벌까?`; const only = await getJSON("finder/dart_only.json").catch(() => ({})); renderEntity(e, app, { dart: only[corp] || null, saramin: await getSaramin(corp) }); window.__pwResult = { code: corp, dartOk: !!only[corp], dartAvg: only[corp] ? only[corp].avg : null }; window.dispatchEvent(new CustomEvent("pw:result", { detail: window.__pwResult })); return; }
       app.innerHTML = `<div class="empty-state">검색 색인에서 해당 회사를 찾지 못했습니다. 이름의 일부로 다시 검색해 주세요.</div>`; return;
     }
     document.title = `${c.n.replace(/\(주\)|주식회사|㈜/g, "").trim()} 다니는 친구는 얼마나 벌까? | 내 친구는 얼마벌까?`;
     c.saramin = await getSaramin(corp);                   // 사람인 값은 DART 값과 별도로 보존(덮어쓰지 않음). 대표값 선택은 pay-source.js
     renderCorp(c, meta, app);
-    window.__pwResult = { code: corp, dartOk: !!(c.dart && c.dart.level === "ok") };   // 이벤트보다 늦게 로드된 연구용 로더도 읽을 수 있게 먼저 기록
+    window.__pwResult = { code: corp, dartOk: !!(c.dart && c.dart.level === "ok"), dartAvg: visibleDartAvg(c) };   // 이벤트보다 늦게 로드된 연구용 로더도 읽을 수 있게 먼저 기록
     window.dispatchEvent(new CustomEvent("pw:result", { detail: window.__pwResult }));   // 연구용 미리보기가 같은 화면에 근속 추정을 덧붙이는 신호(공개 빌드에서는 듣는 곳이 없다)
     return;
   }

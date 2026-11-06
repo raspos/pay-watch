@@ -79,6 +79,6 @@ def test_public_site_has_no_experimental_data_names_or_markers():
     for p in site.rglob("*"):
         if p.is_file() and p.suffix in (".html", ".js", ".css", ".json", ".txt"):
             t = p.read_text(encoding="utf-8", errors="ignore")
-            assert "실험적 추정" not in t and "data/exp" not in t and "LAB 실험" not in t, p
+            assert "data/exp" not in t and "LAB 실험" not in t, p
     gi = (ROOT / ".gitignore").read_text(encoding="utf-8")
     assert "preview/" in gi

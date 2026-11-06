@@ -8,7 +8,7 @@ import { pathToFileURL } from "node:url";
 
 const root = new URL("../../", import.meta.url);
 const dir = mkdtempSync(join(tmpdir(), "expcore-"));
-cpSync(new URL("web_exp/js/exp-core.js", root), join(dir, "exp-core.js"));
+cpSync(new URL("web/js/est-core.js", root), join(dir, "exp-core.js"));
 cpSync(new URL("web/js/common.js", root), join(dir, "common.js"));
 const core = await import(pathToFileURL(join(dir, "exp-core.js")).href);
 const { fmtEok, fmtRange, relWidth, isWide, resolveBin, chartModel, parseQuery, buildQuery, shardOf, reasonText, canEstimate, BINS, BIN_LABEL, DEFAULT_BIN, gradeOf, displayMode } = core;
