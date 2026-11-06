@@ -40,14 +40,26 @@ def check_est(site: Path, fails: list) -> None:
     for f in (est / "s").glob("*.json"):
         for code, r in json.loads(f.read_text(encoding="utf-8")).items():
             n += 1
-            ok = re.fullmatch(r"\d{8}", code) and set(r) <= {"b", "x", "cau", "w"} and {"b", "cau"} <= set(r)
+            ok = re.fullmatch(r"\d{8}", code) and set(r) <= {"b", "x", "cau", "w", "y", "m"} and {"b", "cau", "y", "m"} <= set(r) and r["y"] == 2025
             rng = lambda v: isinstance(v, list) and len(v) == 5 and all(isinstance(t, list) and len(t) == 2 and all(isinstance(u, int) for u in t) and 0 < t[0] <= t[1] for t in v)
             ok = ok and rng(r["b"]) and (r.get("x") is None or (rng(r["x"]) and all(x[0] <= b[0] and x[1] >= b[1] for x, b in zip(r["x"], r["b"]))))
             if not ok:
-                fails.append(f"공개 추정 데이터 형식 이상(허용 필드 b,x,cau,w 외 포함·범위 이상): {code}")
+                fails.append(f"공개 추정 데이터 형식 이상(허용 필드 b,x,cau,w,y,m 외 포함·범위 이상): {code}")
                 return
     if n == 0:
         fails.append("공개 추정 데이터가 비어 있음")
+    meta = est / "meta.json"
+    if not meta.exists() or json.loads(meta.read_text(encoding="utf-8")).get("firms") != n:
+        fails.append("est/meta.json 없음 또는 기업 수 불일치")
+    # 입력인 공시 평균급여가 보류된 기업(level != ok)의 추정은 공개하지 않는다
+    held = set()
+    for f in (site / "data/corp").glob("*.json"):
+        for code, r in json.loads(f.read_text(encoding="utf-8")).items():
+            if r.get("hold") or (r.get("dart") and r["dart"].get("level") != "ok"):
+                held.add(code)
+    bad = [c for f in (est / "s").glob("*.json") for c in json.loads(f.read_text(encoding="utf-8")) if c in held]
+    if bad:
+        fails.append(f"급여 정합성 보류 기업 {len(bad)}곳의 추정이 공개됨 예 {bad[:3]}")
 
 
 def main() -> int:
