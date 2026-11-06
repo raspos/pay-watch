@@ -1,0 +1,16 @@
+# 공개 빌드 정책(명시적 설정). 값을 바꾼 뒤에는 pipeline/build_public.py 와 check_public.py 를 다시 실행한다.
+# 연구용 근속 추정(기업별 실험적 추정)·내부 품질 등급은 어떤 경우에도 공개 빌드(site/)에 포함하지 않는다.
+# 이 값을 true 로 바꾸는 것만으로는 아무것도 공개되지 않으며, pipeline/check_public.py 가 실패한다.
+# (PHASE 12 권고: 현재 모형의 기업별 추정치 외부 공개는 권고하지 않음.)
+publish_experimental: false
+
+# 사람인 평균연봉(PHASE 14.2): 공개 빌드에 포함할 수 있게 구현돼 있으나 외부 게시·재배포 권한이 확인되기 전에는 배포할 수 없다.
+#  saramin_in_site: site/ 에 사람인 데이터를 넣을지(빌드 포함 여부). false 면 사람인 파일이 만들어지지 않고 기존 파일도 지워지며 DART 만으로 동작한다.
+#  saramin_permission: unconfirmed | confirmed. confirmed 로 바꾸려면 사람인 쪽 허락 등 근거를 HANDOFF.md 에 남긴다(사용자 확인 사항).
+#   - site/ 에 사람인 데이터가 있는데 permission 이 confirmed 가 아니면 check_public.py 가 종료 코드 2(배포 차단)로 끝나고 GitHub Actions 검증이 실패해 배포되지 않는다.
+#   - GitHub 공개 저장소와 Pages 정적 JSON 은 누구나 내려받을 수 있다. 화면 표시와 데이터셋 재배포의 권한 범위는 다르므로 허락 범위를 확인한 뒤 확정한다.
+saramin_in_site: true
+saramin_permission: confirmed
+
+# 정정·제보 채널: 실제 연락처가 확인되기 전에는 비워 둔다(가짜 주소를 만들지 않는다). web/js/site-config.js 의 CONTACT 와 함께 확정한다.
+contact: null

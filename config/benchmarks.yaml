@@ -1,0 +1,13 @@
+# 검증 대상 10개 기업. 정규화 사업장명이 exact와 '완전 일치'하는 사업장만 표에 올린다.
+# prefix로 시작하는 나머지는 '후보 수'로만 보고하며 합산하지 않는다(법인 매칭은 Stage 2).
+companies:
+  - {label: 삼성전자, exact: [삼성전자]}
+  - {label: SK하이닉스, exact: [에스케이하이닉스]}
+  - {label: 현대자동차, exact: [현대자동차]}
+  - {label: 기아, exact: [기아]}
+  - {label: 네이버, exact: [네이버]}
+  - {label: 카카오, exact: [카카오]}
+  - {label: KB국민은행, exact: [국민은행, 케이비국민은행]}
+  - {label: 신한은행, exact: [신한은행]}
+  - {label: 포스코, exact: [포스코, 포스코홀딩스]}
+  - {label: LG전자, exact: [엘지전자]}

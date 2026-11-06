@@ -1,0 +1,34 @@
+nps:
+  dataset_id: "15083277"
+  title: 국민연금공단_국민연금 가입 사업장 내역
+  url: https://www.data.go.kr/data/15083277/fileData.do
+  license: 이용허락범위 제한 없음
+  scope_note: "가입자 수 3인 이상 법인사업장, 10인 이상 개인사업장(2025.7. 이후)"
+  encoding_observed: cp949   # 2026-09 파일 실측. 로더는 utf-8-sig 시도 후 cp949
+  columns:   # 헤더 접두어 -> 내부 이름 (2026-09 파일 22열 실측)
+    "자료생성년월": ym
+    "사업장명": name
+    "사업자등록번호": brn6
+    "사업장가입상태코드": status
+    "우편번호": zip
+    "사업장지번상세주소": addr_jibun
+    "사업장도로명상세주소": addr_road
+    "고객법정동주소코드": legal_dong
+    "고객행정동주소코드": admin_dong
+    "법정동주소광역시도코드": sido
+    "법정동주소광역시시군구코드": sigungu
+    "법정동주소광역시시군구읍면동코드": emd
+    "사업장형태구분코드": type_code
+    "사업장업종코드": industry_code
+    "사업장업종코드명": industry_name
+    "적용일자": applied_date
+    "재등록일자": rereg_date
+    "탈퇴일자": withdrawn_date
+    "가입자수": subscribers
+    "당월고지금액": bill_amount
+    "신규취득자수": acquired
+    "상실가입자수": lost
+policy:
+  pay_public_min_subscribers: 10   # 이상이면 추정치 공개 (사용자 확정 2026-11-05)
+  search_min_subscribers: 3        # 3~9명은 검색 포함, 추정치 비공개
+  cap_near_ratio: 0.9

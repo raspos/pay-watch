@@ -1,0 +1,46 @@
+# [보조·탐지 장치] 주된 보호는 업로드 '전' 검증(pipeline/publish_release.py: 사람인 포함 번들은 권한 확인 또는 비공개 저장소가 아니면 올리지 않음, 공개 여부 확인 불가 시 차단)이며,
+# 이 워크플로는 그 경로를 거치지 않은 수동 업로드(웹 UI 등)를 사후에 탐지·차단하는 백업이다. 사후 삭제에 의존하지 않는다 — 업로드 전 검증이 필수 단계다.
+# Release 자산 공개 범위 보호. 공개 저장소의 Release 자산은 누구나 내려받을 수 있으므로, 사람인 게시·재배포 권한이 확인되기 전에는
+# 사람인 데이터가 든 번들이 공개 Release 에 남지 않게 한다. Release 가 게시·수정되면 자동 실행되어 zip 안의 파일을 직접 검사하고,
+# 위반이면 Release 를 초안(비공개)으로 되돌린 뒤 번들 자산을 지운다. (Pages 배포 여부와 무관하게 자산 공개 자체를 막는다.)
+name: release-guard
+on:
+  release:
+    types: [published, edited]
+permissions:
+  contents: write            # 위반 시 Release 를 초안으로 되돌리고 자산을 지우기 위해서만 필요
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: 번들 자산 내려받기
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p bundle
+          gh release download "${{ github.event.release.tag_name }}" --repo "${{ github.repository }}" --dir bundle --pattern "manifest.json" --pattern "pay-watch-site-*.zip" || echo "번들 자산 없음: 검사할 것이 없습니다"
+      - name: 권한 설정 판독(설정 + 근거 파일)
+        id: perm
+        run: |
+          if grep -Eq '^saramin_permission:[[:space:]]*confirmed' config/publish.yaml && [ -s config/saramin_permission_evidence.md ]; then echo "permitted=true" >> "$GITHUB_OUTPUT"; else echo "permitted=false" >> "$GITHUB_OUTPUT"; fi
+      - name: 사람인 데이터 직접 검사(zip 안의 파일 이름)
+        id: guard
+        run: |
+          if [ -f bundle/manifest.json ]; then
+            python -I -X utf8 pipeline/release_guard.py bundle --repo-private "${{ github.event.repository.private }}" --permitted "${{ steps.perm.outputs.permitted }}"
+          else
+            echo "번들 없음: 통과"
+          fi
+      - name: 위반 시 Release 를 초안으로 되돌리고 번들 자산 삭제
+        if: failure() && steps.guard.conclusion == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit "${{ github.event.release.tag_name }}" --repo "${{ github.repository }}" --draft
+          for a in $(gh release view "${{ github.event.release.tag_name }}" --repo "${{ github.repository }}" --json assets --jq '.assets[].name'); do
+            gh release delete-asset "${{ github.event.release.tag_name }}" "$a" --repo "${{ github.repository }}" --yes
+          done
+          echo "Release 를 초안으로 되돌리고 자산을 삭제했습니다(사람인 게시 권한 미확인)."

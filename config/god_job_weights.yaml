@@ -1,0 +1,15 @@
+# 신의 직장 지수 가중치 — 잠정안(확정 아님). 실제 분포 검토 후 결정. 공개 보류.
+version: provisional-0.1
+publish: false
+components:
+  pay_competitiveness: 0.40     # 동종·유사 규모 내 급여 백분위(상한 절단 시 신뢰도 낮음)
+  employment_stability: 0.25    # 12개월 누적 상실률이 낮을수록(퇴사율 아님)
+  tenure: 0.20                  # DART 평균근속(비상장 대부분 결측) — DART 확보 전 unavailable
+  growth: 0.15                  # 12개월 가입자 증가율의 업종 내 백분위
+basic_index:                    # 공통 데이터(NPS)만 사용: 근속 제외 후 가중치 재정규화
+  use: [pay_competitiveness, employment_stability, growth]
+requirements:
+  min_peer: 30
+  need_history_months: 13
+  exclude_restructure_suspect: true
+  exclude_pay_censored_from_rank: true

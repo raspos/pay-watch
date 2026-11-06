@@ -1,0 +1,39 @@
+.env
+data/raw/
+data/interim/
+data/processed/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.tmp
+
+# PHASE 11: 연구용(실험적) 미리보기 빌드와 기업별 추정 결과는 PHASE 12 통합 검증 전까지 공개 저장소에 올리지 않는다.
+preview/
+reports/wage_model/phase*_estimates.csv
+reports/wage_model/phase8_scenarios.csv
+reports/wage_model/phase9_group_a_quality.csv
+reports/wage_model/phase10_shape_firm_summary.csv
+reports/wage_model/phase10_shape_focus_firms.csv
+
+# PHASE 14.3: 생성된 공개 산출물(site/, 약 420MB)은 저장소 기록에 올리지 않는다. 검증된 번들(dist/)을 GitHub Release 자산으로 전달하고 Actions 가 검증 후 Pages 로 배포한다(docs/DEPLOY.md).
+site/
+dist/
+data/
+# 사람인 통합 데이터·내부 매칭/선택 감사는 공개 저장소에 올리지 않는다(외부 게시·재배포 권한 확인 전).
+reports/phase14_2_*
+reports/phase14_1_display_states.csv
+reports/phase14_3_diff_lists.csv
+scratch_*.pkl
+
+dist-test/
+
+# 최종 공개(2026-11-07): 내부 분석·연구 산출물·개발 문서·캡처는 공개 저장소에 올리지 않는다(기업별 추정·내부 등급 CSV 포함).
+reports/
+CLAUDE.md
+PROGRESS.md
+HANDOFF.md
+docs/screenshots/
+.claude/
+content/
+corrections/
+insights/

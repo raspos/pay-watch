@@ -1,0 +1,1 @@
+METHODOLOGY_VERSION = "0.4.0-stage4"

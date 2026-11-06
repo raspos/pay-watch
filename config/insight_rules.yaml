@@ -1,0 +1,42 @@
+# INSIGHT 탐지 규칙. 임계값은 코드가 아니라 여기서만 바꾼다. 탐지 결과는 '후보'이며 뉴스가 아니다.
+version: "0.1"
+common:
+  exclude_project_sites: true         # 건설 현장 단위 사업장(회사 아님)
+  exclude_restructure_suspect: true   # 12개월 내 전월 대비 ±50% 급변 사업장(합병·분할·재등록 가능성)
+  need_history_months: 13
+  group_offset_ratio: 0.5             # 같은 이름 사업장 묶음의 변화가 개별의 절반 미만이면 '사업장 이동 가능성' 표시
+detectors:
+  headcount_drop:                     # 사람이 줄어드는 회사
+    min_base: 50
+    drop_pct: -0.20
+    min_net: -20
+    limit: 50
+  turnaround:                         # 반전의 직장: 앞 6개월 감소 후 뒤 6개월 증가
+    min_base: 100
+    first_half_drop: -0.10
+    second_half_gain: 0.10
+    min_swing_abs: 30                 # 감소·증가 각각 절대 30명 이상(작은 분모의 출렁임 배제)
+    limit: 50
+  quiet_high_pay:                     # 조용한 연봉 맛집
+    min_subs: 10
+    max_subs: 199
+    min_premium: 0.40
+    min_pct: 0.90
+    min_peer_median_ratio: 0.8        # 비교집단 중앙값이 전체 중앙값의 80% 미만인 구조적 저임금 업종은 제외(택시·버스 등)
+    need_scope: [code6_size, code6_merged]   # 세분 업종 비교집단에서만
+    limit: 50
+  industry_headcount_shift:           # 고용의 지각변동(같은 사업장 집합 기준)
+    level: ind4
+    min_base_subs: 3000
+    min_continuing_wp: 30
+    limit: 15
+  pay_dispersion:                     # 연봉 양극화(상한 비접근 사업장만)
+    level: ind4
+    min_wp: 100
+    min_change: 0.10
+    limit: 15
+unavailable:                          # 자료가 없어 만들지 않는 탐지기(0·가짜 값 금지)
+  - {type: pay_betrayal, name: 연봉의 배신, need: "DART 평균급여·영업이익"}
+  - {type: exec_gap, name: 사장님과 직원의 거리, need: "DART 임원 보수·직원 평균급여"}
+  - {type: growth_vs_pay, name: 직원보다 빠르게 성장한 실적, need: "DART 매출·영업이익·평균급여"}
+  - {type: real_pay_decline, name: 월급 역주행, need: "공식 소비자물가지수(미확보)"}
