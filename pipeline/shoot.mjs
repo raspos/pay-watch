@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 const EDGE = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const [tag = "after", port = "8791", ...extra] = process.argv.slice(2);
 const PAGES = { index: "index.html", "exp-search": "exp.html", "exp-result": "exp.html?c=00126380", company: "company.html?corp=00126380", compare: "compare.html", lab: "lab.html", methodology: "methodology.html" };
+if (process.env.ONLY) for (const k of Object.keys(PAGES)) delete PAGES[k];
 for (const e of extra) { const i = e.indexOf("="); PAGES[e.slice(0, i)] = e.slice(i + 1); }
 const SIZES = { desktop: [1280, 900, false], mobile: [375, 812, true] };
 const out = fileURLToPath(new URL("../docs/screenshots/phase13/" + tag, import.meta.url)); mkdirSync(out, { recursive: true });

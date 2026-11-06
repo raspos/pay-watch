@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 244 150" width="488" height="300">
+<rect width="244" height="150" fill="#fff"/>
+<!-- 벽(종이 시트): 구멍 뚫린 면 -->
+<rect x="10" y="8" width="224" height="134" rx="14" fill="#e6e9ee"/>
+<!-- 찢어진 구멍 안쪽 -->
+<path id="hole" d="M66 56 L72 38 L88 28 L96 34 L112 22 L132 26 L142 20 L160 30 L172 44 L168 58 L180 70 L170 86 L174 100 L156 108 L146 116 L126 108 L110 118 L96 106 L80 108 L74 92 L62 80 Z" fill="#fff6e3"/>
+<path d="M66 56 L72 38 L88 28 L96 34 L112 22 L132 26 L142 20 L160 30 L172 44 L168 58 L180 70 L170 86 L174 100 L156 108 L146 116 L126 108 L110 118 L96 106 L80 108 L74 92 L62 80 Z" fill="none" stroke="#111418" stroke-width="2.2" stroke-linejoin="round"/>
+<!-- 구멍 안쪽 그늘(위쪽) -->
+<path d="M72 38 L88 28 L96 34 L112 22 L132 26 L142 20 L160 30 L172 44 L160 50 C140 42 100 42 78 52 Z" fill="#f0dfb8" opacity=".75"/>
+<!-- 눈 -->
+<path d="M84 70 C102 44 142 44 160 70 C142 96 102 96 84 70 Z" fill="#fff" stroke="#111418" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="122" cy="70" r="17" fill="#1a55e6"/>
+<circle cx="122" cy="70" r="7.8" fill="#111418"/>
+<circle cx="116.6" cy="64.6" r="3.2" fill="#fff"/>
+<path d="M84 70 C102 44 142 44 160 70" fill="none" stroke="#111418" stroke-width="3.4" stroke-linecap="round"/>
+<!-- 말려 올라간 종이 조각(찢긴 가장자리) -->
+<g stroke="#111418" stroke-width="2.2" stroke-linejoin="round" fill="#f3e5bd">
+  <path d="M52 52 L76 36 L92 42 L84 54 L70 62 Z"/>
+  <path d="M126 22 L152 12 L170 20 L160 32 L140 30 Z"/>
+  <path d="M166 62 L190 56 L196 70 L184 82 L172 80 Z"/>
+  <path d="M60 96 L82 92 L92 104 L78 118 L56 114 Z"/>
+  <path d="M148 108 L172 98 L186 106 L176 120 L156 122 Z"/>
+</g>
+<!-- 접힌 안쪽 면(어두운 색) -->
+<g fill="#d8c48f" stroke="none">
+  <path d="M76 36 L92 42 L84 54 Z"/>
+  <path d="M152 12 L170 20 L160 32 Z"/>
+  <path d="M190 56 L196 70 L184 82 Z"/>
+  <path d="M82 92 L92 104 L78 118 Z"/>
+  <path d="M172 98 L186 106 L176 120 Z"/>
+</g>
+</svg>
