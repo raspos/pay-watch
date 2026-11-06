@@ -1,6 +1,6 @@
 // 법인(회사) 뷰: 공시 1인 평균급여(DART, 파생값)와 국민연금 추정(확인된 사업장 합산)을 별도 카드로 구분해 보여준다.
-import { pickRepresentative, visibleDartAvg } from "./pay-source.js?v=fc247f737b";
-import { avatar, barChart, capAnnual, esc, fmtInt, fmtMan, fmtPct, gauge, getJSON, histogram, last, lineChart, sparkline, ymShort } from "./common.js?v=fc247f737b";
+import { pickRepresentative, visibleDartAvg } from "./pay-source.js?v=1f6a6aec9c";
+import { avatar, barChart, capAnnual, esc, fmtInt, fmtMan, fmtPct, gauge, getJSON, histogram, last, lineChart, sparkline, ymShort } from "./common.js?v=1f6a6aec9c";
 
 export async function getCorp(code) {
   const sh = await getJSON(`corp/${Number(code) % 128}.json`);
@@ -57,7 +57,7 @@ export function renderCorp(c, meta, app) {
   <section class="rep" aria-labelledby="nm" aria-live="polite">${repHtml}</section>
   <div id="exp-slot"></div>
   ${pair ? `<section class="res-chart"><h2 class="res-h">공시와 국민연금 추정 비교</h2>${pair}</section>` : ""}
-  <p class="res-actions"><a href="compare.html?items=c${c.code}">다른 회사와 비교하기</a></p>
+  <p class="res-actions"><a href="rank.html?add=${c.code}">내 친구들 회사와 비교하기</a> <a href="compare.html?items=c${c.code}">다른 회사와 비교하기</a></p>
   <details class="more"><summary>국민연금 기반 추정과 상세 분석</summary>
     ${scopeOff ? `<p class="disclaimer"><b>집계 범위 차이</b> 확인된 사업장의 가입자 합이 공시 직원 수의 ${(c.scope * 100).toFixed(0)}% 수준이라 국민연금 추정은 확인된 사업장 기준입니다.</p>` : ""}
     <div class="grid g2" style="margin-top:12px">${npsCard}</div>
@@ -139,5 +139,5 @@ export function renderEntity(e, app, extra = {}) {
   const kind = /^\d{8}$/.test(e.code) ? `c${e.code}` : `s${String(e.code).slice(1)}`;
   app.innerHTML = `<header class="res-head"><h1 id="nm">${esc(e.display || name)}</h1>${e.display && e.display !== e.legal ? `<p class="res-sub">${esc(e.legal)}</p>` : ""}</header>
     <section class="rep" aria-labelledby="nm" aria-live="polite">${repBlockHtml(rep, c.dart)}</section>
-    <div id="exp-slot"></div><p class="res-actions"><a href="compare.html${rep.kind === "value" ? `?items=${kind}` : ""}">다른 회사와 비교하기</a></p>`;
+    <div id="exp-slot"></div><p class="res-actions"><a href="rank.html?add=${e.code}">내 친구들 회사와 비교하기</a> <a href="compare.html${rep.kind === "value" ? `?items=${kind}` : ""}">다른 회사와 비교하기</a></p>`;
 }

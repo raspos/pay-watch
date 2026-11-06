@@ -1,4 +1,4 @@
-import { CONTACT } from "./site-config.js?v=fc247f737b";
+import { CONTACT } from "./site-config.js?v=1f6a6aec9c";
 // 공통: 정규화(파이썬 export_public.search_key 와 동일 규칙), 데이터 로더, 서식, SVG 차트
 const BASE = new URL("../data/", import.meta.url);
 const cache = new Map();
@@ -155,7 +155,7 @@ export function avatar(name) {
 }
 
 export function chrome(active) {
-  const nav = [["index.html", "홈"], ["compare.html", "월급 배틀"], ["lab.html", "LAB"], ["methodology.html", "방법론"]];
+  const nav = [["index.html", "홈"], ["rank.html", "친구들 랭킹"], ["compare.html", "월급 배틀"], ["lab.html", "LAB"], ["methodology.html", "방법론"]];
   document.body.insertAdjacentHTML("afterbegin", `<a class="skip" href="#main">본문으로 건너뛰기</a>
   <header class="site"><div class="wrap"><a class="brand" href="index.html" aria-label="PAY워치, 내 친구는 얼마벌까? 홈">PAY워치</a>
   <nav class="main" aria-label="주요 메뉴">${nav.map(([h, t]) => `<a href="${h}" ${h === active ? 'aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div></header>`);

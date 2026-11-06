@@ -1,4 +1,4 @@
-import { chrome, esc, fmtInt, getMeta } from "./common.js?v=fc247f737b";
+import { chrome, esc, fmtInt, getMeta } from "./common.js?v=1f6a6aec9c";
 
 chrome("methodology.html");
 const ym = s => s === "9999-12" ? "이후" : s.replace("-", ".");

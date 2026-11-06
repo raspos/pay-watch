@@ -1,8 +1,8 @@
 // 통합 기업 찾기 입력창(ARIA combobox). DART 법인 색인(finder-core)과 국민연금 사업장 검색(search.js)을 한 입력창으로 합친다.
 // 결과 항목은 식별자(DART 법인코드 또는 국민연금 사업장 id)를 그대로 들고 있으며, 선택하면 onPick(item) 만 호출한다.
-import { esc, getJSON, searchKey } from "./common.js?v=fc247f737b";
-import { CATEGORY_LABEL, buildFinder, category, searchFinder, shownName } from "./finder-core.js?v=fc247f737b";
-import { normalize } from "./finder-core.js?v=fc247f737b";
+import { esc, getJSON, searchKey } from "./common.js?v=1f6a6aec9c";
+import { CATEGORY_LABEL, buildFinder, category, searchFinder, shownName } from "./finder-core.js?v=1f6a6aec9c";
+import { normalize } from "./finder-core.js?v=1f6a6aec9c";
 
 let entPromise = null;
 export const loadEntities = () => (entPromise ||= getJSON("finder/entities.json").then(buildFinder));
