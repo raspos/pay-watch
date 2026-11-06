@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>친구 회사 월급 배틀 | 내 친구는 얼마벌까?</title>
+<meta name="description" content="회사를 2곳에서 4곳까지 골라 평균급여와 고용 지표를 같은 기준으로 나란히 비교합니다. 기준이 다른 값은 승패를 가르지 않습니다.">
+<meta property="og:site_name" content="내 친구는 얼마벌까? | PAY워치">
+<meta property="og:title" content="친구 회사 월급 배틀 | 내 친구는 얼마벌까?">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2317181a'/%3E%3Ctext x='16' y='22' font-size='15' font-weight='700' text-anchor='middle' fill='%23fafaf8'%3EPW%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css?v=9cecb8f822">
+</head>
+<body>
+<main id="main"><div class="wrap">
+  <h1 style="font-size:clamp(1.75rem,6vw,2.75rem)">친구 회사 월급 배틀</h1>
+  <p class="lead">회사를 2곳에서 4곳까지 골라 같은 기준으로 나란히 비교해 보세요.</p>
+
+  <section class="card picker" aria-labelledby="pk">
+    <h2 id="pk" class="vh">비교할 회사</h2>
+    <ul class="picks" id="picks" aria-live="polite"></ul>
+    <div id="addwrap">
+      <p class="disclaimer" id="addlab" style="margin-top:0">회사 추가 (최대 4곳)</p>
+      <div class="searchbox" id="add"></div>
+    </div>
+  </section>
+
+  <p class="disclaimer">같은 종류·같은 기준의 값끼리만 높고 낮음을 표시합니다. 개인의 실제 연봉이 아닙니다.</p>
+  <details class="qa"><summary>비교 원칙 자세히</summary><p class="disclaimer">같은 종류, 같은 기준의 값끼리만 높고 낮음을 표시합니다. 공시 급여는 공시끼리, 국민연금 추정은 상한에 접근하지 않은 회사끼리만 비교하고, 기준이 달라 비교할 수 없는 항목은 이유와 함께 우열 표시를 하지 않습니다. 종합 점수나 단일 승자는 만들지 않습니다. 회사 평균이며 개인의 실제 연봉이 아닙니다.</p></details>
+
+  <div id="out" aria-live="polite"></div>
+</div></main>
+<script defer src="js/vendor/fuse.min.js?v=9cecb8f822"></script>
+<script type="module" src="js/compare.js?v=9cecb8f822"></script>
+</body>
+</html>
