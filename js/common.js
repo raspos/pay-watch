@@ -1,4 +1,4 @@
-import { CONTACT } from "./site-config.js?v=1f6a6aec9c";
+import { CONTACT } from "./site-config.js?v=a343786488";
 // 공통: 정규화(파이썬 export_public.search_key 와 동일 규칙), 데이터 로더, 서식, SVG 차트
 const BASE = new URL("../data/", import.meta.url);
 const cache = new Map();

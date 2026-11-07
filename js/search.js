@@ -1,5 +1,5 @@
 // 검색: ①첫 로드 top.json(가입자 100명 이상) ②앞 두 글자 청크(필요할 때만) ③Fuse 로 오타 허용. 서버 없음.
-import { esc, fmtInt, getJSON, searchKey } from "./common.js?v=1f6a6aec9c";
+import { esc, fmtInt, getJSON, searchKey } from "./common.js?v=a343786488";
 
 let topPromise = null;
 export function loadTop() {
