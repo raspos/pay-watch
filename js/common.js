@@ -1,4 +1,4 @@
-import { CONTACT } from "./site-config.js?v=a343786488";
+import { CONTACT } from "./site-config.js?v=080a125729";
 // 공통: 정규화(파이썬 export_public.search_key 와 동일 규칙), 데이터 로더, 서식, SVG 차트
 const BASE = new URL("../data/", import.meta.url);
 const cache = new Map();
@@ -160,7 +160,8 @@ export function chrome(active) {
   <header class="site"><div class="wrap"><a class="brand" href="index.html" aria-label="PAY워치, 내 친구는 얼마벌까? 홈">PAY워치</a>
   <nav class="main" aria-label="주요 메뉴">${nav.map(([h, t]) => `<a href="${h}" ${h === active ? 'aria-current="page"' : ""}>${t}</a>`).join("")}</nav></div></header>`);
   document.body.insertAdjacentHTML("beforeend", `<footer class="site"><div class="wrap">
-  <p>회사 단위 통계이며 개인의 실제 연봉이 아닙니다. 공시 평균급여(DART 사업보고서)와 국민연금 고지액 기반 추정급여는 서로 다른 지표입니다. <a href="methodology.html">방법론·출처·한계</a>${CONTACT ? ` · <a href="${esc(CONTACT.href)}">${esc(CONTACT.label)}</a>` : ""}</p></div></footer>`);
+  <p>회사 단위 통계이며 개인의 실제 연봉이 아닙니다. 공시 평균급여(DART 사업보고서)와 국민연금 고지액 기반 추정급여는 서로 다른 지표입니다. <a href="methodology.html">방법론·출처·한계</a>${CONTACT ? ` · <a href="${esc(CONTACT.href)}">${esc(CONTACT.label)}</a>` : ""}</p>
+  <p class="copy">© <a href="https://raspos.github.io/databrew/" target="_blank" rel="noopener">databrew</a></p></div></footer>`);
 }
 
 
