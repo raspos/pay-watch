@@ -1,8 +1,8 @@
 // PAY워치 연구용 미리보기: 기업 결과 화면(company.html?corp=코드)에 '근속 구간 집단의 평균급여 · 실험적 추정' 영역을 덧붙인다(연구용 빌드 전용; 공개 site/ 에는 이 파일이 없다).
 // 표시 기준(범위 산출·민감도 검토를 통과한 기업만): A 범위 / B 범위 + 간결한 주의 / C·D 영역 자체를 렌더링하지 않는다(데이터에도 범위가 없다).
 // 대표 범위는 확대 시나리오, 기본 시나리오는 접이식 상세. 기본 근속 구간은 5~10년(검색 직후 추가 클릭 없음).
-import { esc, getJSON } from "./common.js?v=d822ce9827";
-import { BINS, BIN_LABEL, DEFAULT_BIN, WIDE, canEstimate, chartModel, fmtEok, fmtRange, gradeOf, isWide, reasonText, resolveBin, shardOf } from "./est-core.js?v=d822ce9827";
+import { esc, getJSON } from "./common.js?v=21f7cf11ea";
+import { BINS, BIN_LABEL, DEFAULT_BIN, WIDE, canEstimate, chartModel, fmtEok, fmtRange, gradeOf, isWide, reasonText, resolveBin, shardOf } from "./est-core.js?v=21f7cf11ea";
 
 export async function getFirm(code) { const sh = await getJSON(`est/s/${shardOf(code)}.json`); return sh[code] || null; }
 
@@ -47,27 +47,30 @@ function cautionHtml(rec) {
 }
 
 // 다섯 구간의 시나리오 추정 범위를 한눈에(대표 범위 = 확대 시나리오, 없으면 기본). 클릭하면 아래 큰 숫자·그래프가 바뀐다.
+// 근속 구간 선택 버튼 5개(금액은 선택한 구간만 아래에 표시한다).
 function tableHtml(rec, bin) {
-  return `<ol class="xp-tab" aria-label="근속 구간별 집단 평균급여 시나리오 추정 범위">${BIN_LABEL.map((l, i) => {
-    const r = resolveBin(rec, i), m = r.exp || r.base;
-    return `<li class="${i === bin ? "on" : ""}"><button type="button" data-bin="${i}" aria-pressed="${i === bin}"><span>${esc(l)}</span><b>${esc(fmtRange(m))}</b></button></li>`;
-  }).join("")}</ol>`;
+  return `<div class="xp-tab" role="group" aria-label="근속기간 선택">${BIN_LABEL.map((l, i) =>
+    `<button type="button" data-bin="${i}" aria-pressed="${i === bin}" class="${i === bin ? "on" : ""}">${esc(l)}</button>`).join("")}</div>`;
+}
+/** 선택한 구간의 기본·확대 추정 연봉 두 줄. 확대 결과가 없으면 값을 만들지 않고 '확대 추정 불가'. */
+export function pairHtml(rec, bin) {
+  const r = resolveBin(rec, bin);
+  return `<dl class="xp-pair" aria-live="polite"><div><dt>기본 추정 연봉</dt><dd class="xp-big">${esc(fmtRange(r.base))}</dd></div>
+    <div><dt>확대 추정 연봉</dt>${r.exp ? `<dd class="xp-big">${esc(fmtRange(r.exp))}</dd>` : '<dd class="xp-na">확대 추정 불가</dd>'}</div></dl>`;
 }
 
 function sectionHtml(rec, bin) {
   const r = resolveBin(rec, bin);
-  const main = r.exp || r.base, mainNote = r.exp ? "곡선 형태 변화까지 반영한 대표 범위" : "인력 구성만 반영(곡선 형태 분석을 수행하지 않아 확대 범위 없음)";
   return `<section class="xp-sec" aria-labelledby="xr">
     <p class="xp-flag"><span>연구용</span> 공식 공시값이 아닌 모형 추정입니다</p>
     <h2 id="xr" class="xp-kicker">근속 구간 집단의 평균급여 · 실험적 추정</h2>
     ${tableHtml(rec, bin)}
-    <p class="xp-big" aria-live="polite"><span class="vh">근속 ${esc(BIN_LABEL[bin])}: </span>${esc(fmtRange(main))}</p>
-    <p class="xp-cap">근속 ${esc(BIN_LABEL[bin])} · ${esc(mainNote)} · 개인 연봉이나 통계적 신뢰구간이 아니며 정확도는 검증되지 않았습니다</p>
+    ${pairHtml(rec, bin)}
+    <p class="xp-cap">기본: 인력 구성만 반영 · 확대: 곡선 형태 변화까지 반영 · 개인 연봉이 아닌 집단 평균이며 정확도는 검증되지 않았습니다</p>
     ${noteHtml(rec, bin)}
     <div class="xp-chartbox">${chartSvg(rec, bin)}<p class="xp-legend"><span class="sw base"></span>기본 <span class="sw exp"></span>확대 ${rec.a != null ? '<span class="sw avg"></span>기업 전체 평균(공시)' : ""}${(chartModel(rec, bin) || {}).zeroBased ? "" : " · 세로축은 0에서 시작하지 않음"}</p></div>
     <details class="xp-det"><summary>출처 · 추정 방법 · 주의사항</summary>
       <p><b>출처</b>: 고용노동부 고용형태별노동실태조사 산업·근속 구간별 임금 + 이 회사의 DART 공시 평균급여·평균근속(${esc(rec.y || 2025)}년 기준, 모형 ${esc(rec.m || "")}).</p>
-      <p><b>기본 시나리오</b>(인력 구성만 반영) 근속 ${esc(BIN_LABEL[bin])}: ${esc(fmtRange(r.base))}</p>
       ${methodHtml()}${cautionHtml(rec)}</details>
     </section>`;
 }

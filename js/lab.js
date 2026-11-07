@@ -1,5 +1,5 @@
-import { chrome, esc, getJSON } from "./common.js?v=d822ce9827";
-import { KIND, binTable, chartGeom, filterItems, fmtMan, fmtN, fmtPct, lastOverFirst, optionLabel, series, vsAll } from "./lab-core.js?v=d822ce9827";
+import { chrome, esc, getJSON } from "./common.js?v=21f7cf11ea";
+import { KIND, binTable, chartGeom, filterItems, fmtMan, fmtN, fmtPct, lastOverFirst, optionLabel, series, vsAll } from "./lab-core.js?v=21f7cf11ea";
 
 chrome("lab.html");
 const $ = id => document.getElementById(id);
