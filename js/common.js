@@ -1,5 +1,5 @@
-import { CONTACT, GOATCOUNTER_CODE } from "./site-config.js?v=fe815e7e7c";
-import { loadGoatCounter, showTotal } from "./views.js?v=fe815e7e7c";
+import { CONTACT, GOATCOUNTER_CODE } from "./site-config.js?v=7a40c83100";
+import { loadGoatCounter, showTotal } from "./views.js?v=7a40c83100";
 // 공통: 정규화(파이썬 export_public.search_key 와 동일 규칙), 데이터 로더, 서식, SVG 차트
 const BASE = new URL("../data/", import.meta.url);
 const cache = new Map();

@@ -1,5 +1,5 @@
 // 근속 구간별 집단 평균급여 추정 영역 로더(회사 결과 화면 company.html 전용). 추정 데이터가 있는 기업(A·B 2,138곳)에만 영역을 그리고, 없으면 아무것도 렌더링하지 않는다.
-import { mountEstimate } from "./est-section.js?v=fe815e7e7c";
+import { mountEstimate } from "./est-section.js?v=7a40c83100";
 
 const go = () => {
   const q = new URLSearchParams(location.search), slot = document.getElementById("exp-slot"), code = q.get("corp") || q.get("sm"), r = window.__pwResult;

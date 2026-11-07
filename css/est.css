@@ -41,5 +41,6 @@
 .xp-pair dt{font-size:var(--fs-s);color:var(--muted)}
 .xp-pair dd{margin:2px 0 0}
 .xp-pair .xp-big{margin:0;font-size:clamp(1.5rem,7vw,2.25rem)}
+.xp-pair div:nth-child(2) .xp-big{font-size:clamp(1rem,4.7vw,1.5rem)}
 .xp-na{font-size:var(--fs-m);color:var(--muted)}
 .xp-tab button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}

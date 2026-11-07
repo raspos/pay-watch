@@ -1,8 +1,8 @@
 // PAY워치 연구용 미리보기: 기업 결과 화면(company.html?corp=코드)에 '근속 구간 집단의 평균급여 · 실험적 추정' 영역을 덧붙인다(연구용 빌드 전용; 공개 site/ 에는 이 파일이 없다).
 // 표시 기준(범위 산출·민감도 검토를 통과한 기업만): A 범위 / B 범위 + 간결한 주의 / C·D 영역 자체를 렌더링하지 않는다(데이터에도 범위가 없다).
 // 대표 범위는 확대 시나리오, 기본 시나리오는 접이식 상세. 기본 근속 구간은 5~10년(검색 직후 추가 클릭 없음).
-import { esc, getJSON } from "./common.js?v=fe815e7e7c";
-import { BINS, BIN_LABEL, DEFAULT_BIN, WIDE, canEstimate, chartModel, fmtEok, fmtRange, gradeOf, isWide, reasonText, resolveBin, shardOf } from "./est-core.js?v=fe815e7e7c";
+import { esc, getJSON } from "./common.js?v=7a40c83100";
+import { BINS, BIN_LABEL, DEFAULT_BIN, WIDE, canEstimate, chartModel, fmtEok, fmtRange, gradeOf, isWide, reasonText, resolveBin, shardOf } from "./est-core.js?v=7a40c83100";
 
 // DART 기반 추정(est/s)이 우선. 없으면 사람인 평균연봉 기반 '산업 통계 기반 참고 추정'(est/sm, mt:"ind"). 둘 다 있는 기업은 DART 것만 쓴다(중복 계산 없음).
 export async function getFirm(code) {
