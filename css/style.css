@@ -126,6 +126,8 @@ body.home main>.wrap{width:100%}
 .landing .searchbox{margin:0 auto;max-width:600px}
 .landing .searchbox input{min-height:56px;padding:14px 20px;font-size:var(--fs-l);border:1px solid var(--field);border-radius:28px}
 .landing .searchbox input:focus{border-color:var(--accent);outline:2px solid var(--accent);outline-offset:1px;box-shadow:none}
+.landing .fine.hint{margin:var(--space-3) auto 0}
+.landing .fine.hint+.fine{margin-top:var(--space-1)}
 .landing .fine{font-size:var(--fs-s);color:var(--muted);margin:var(--space-4) auto 0;max-width:34rem;min-height:1.4em}
 /* 공시 대 추정 짝 막대(실제 값으로 그림, 상한선 점선) */
 .pairbars{display:grid;grid-template-columns:7.5rem minmax(0,1fr) 5.5rem;gap:var(--space-2) var(--space-3);align-items:center;margin:var(--space-5) 0 var(--space-2)}
