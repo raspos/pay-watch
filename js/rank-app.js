@@ -1,10 +1,10 @@
 // PAY RANK 화면 컨트롤러(안티그래비티 pay-rank/js/app.js 의 구조를 PAY워치 디자인·데이터에 맞게 옮김).
 // 흐름: 친구 추가 → 랭킹 만들기 → 공유. 기업 데이터는 처음 회사 입력창을 쓸 때(또는 공유 링크 복원 때) 불러온다.
-import { chrome, esc, getJSON } from "./common.js?v=1fc405ae56";
-import { buildFinder, searchFinder, resultHref } from "./finder-core.js?v=1fc405ae56";
-import { loadEntities } from "./finder-ui.js?v=1fc405ae56";
-import { DISCLAIMER, MAX_FRIENDS, MIN_FRIENDS, MIX_NOTE, calculateRanking, companyRankInfo, formatSalary, makeCompanies, sourceLabel, topByIndustry } from "./rank-engine.js?v=1fc405ae56";
-import { copyToClipboard, downloadRankingImage, generateEmbedCode, generateShareUrl, nativeShare, parseShareParams } from "./rank-share.js?v=1fc405ae56";
+import { chrome, esc, getJSON } from "./common.js?v=d822ce9827";
+import { buildFinder, searchFinder, resultHref } from "./finder-core.js?v=d822ce9827";
+import { loadEntities } from "./finder-ui.js?v=d822ce9827";
+import { DISCLAIMER, MAX_FRIENDS, MIN_FRIENDS, MIX_NOTE, calculateRanking, companyRankInfo, formatSalary, makeCompanies, sourceLabel, topByIndustry } from "./rank-engine.js?v=d822ce9827";
+import { copyToClipboard, downloadRankingImage, generateEmbedCode, generateShareUrl, nativeShare, parseShareParams } from "./rank-share.js?v=d822ce9827";
 
 const params = parseShareParams(location.search);
 if (params.embed) document.body.classList.add("rk-embed");

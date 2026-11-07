@@ -116,6 +116,7 @@ details.qa summary{cursor:pointer;font-weight:700}
 code,.formula{font-family:var(--mono);background:var(--accent-soft);padding:2px 6px;border-radius:4px;font-size:.92em}
 .formula{display:block;padding:10px 12px;margin:8px 0;overflow-x:auto}
 footer.site .copy{margin:var(--space-2) 0 0}
+footer.site #visits{margin-left:var(--space-3)}
 footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:.8125rem;padding:20px 0 40px}
 /* 메인 화면: 제목·슬로건·검색창만. 검색창이 시각적 중심이다. */
 body.home main{min-height:calc(100vh - 200px);display:flex;align-items:center}
