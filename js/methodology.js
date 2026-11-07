@@ -1,5 +1,5 @@
-import { chrome, esc, fmtInt, getMeta } from "./common.js?v=21f7cf11ea";
-import { GOATCOUNTER_CODE } from "./site-config.js?v=21f7cf11ea";
+import { chrome, esc, fmtInt, getMeta } from "./common.js?v=e5fe82c4d7";
+import { GOATCOUNTER_CODE } from "./site-config.js?v=e5fe82c4d7";
 
 chrome("methodology.html");
 const ym = s => s === "9999-12" ? "이후" : s.replace("-", ".");

@@ -1,8 +1,8 @@
 // 메인 화면: 통합 기업 찾기(DART 법인 + 국민연금 사업장) 하나만. 순위·차트·통계는 두지 않는다.
-import { chrome } from "./common.js?v=21f7cf11ea";
-import { mountFinder } from "./finder-ui.js?v=21f7cf11ea";
-import { resultHref } from "./finder-core.js?v=21f7cf11ea";
-import { searchTop } from "./search.js?v=21f7cf11ea";
+import { chrome } from "./common.js?v=e5fe82c4d7";
+import { mountFinder } from "./finder-ui.js?v=e5fe82c4d7";
+import { resultHref } from "./finder-core.js?v=e5fe82c4d7";
+import { searchTop } from "./search.js?v=e5fe82c4d7";
 
 chrome("index.html");
 mountFinder(document.getElementById("search"), {
