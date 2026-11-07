@@ -1,6 +1,6 @@
 // PAY RANK 공유 엔진: 1080px 세로형 PNG(Canvas 2D, 외부 라이브러리·외부 폰트 없음), 공유 링크(기업 식별자만, 별명은 명시적 선택 시에만), 링크 복사, 모바일 네이티브 공유, 임베드 코드.
 // pay-rank/js/share.js 를 ES 모듈로 옮겼고, 친구 10명까지 높이를 동적으로 늘리며 긴 이름은 잘라내지 않고 줄바꿈·글자 축소로 모두 보이게 했다.
-import { DISCLAIMER, MIX_NOTE } from "./rank-engine.js?v=e5fe82c4d7";
+import { DISCLAIMER, MIX_NOTE } from "./rank-engine.js?v=fe815e7e7c";
 
 export const ID_RE = /^(\d{8}|S[0-9a-f]{10})$/;
 export const W = 1080, PAD = 72;

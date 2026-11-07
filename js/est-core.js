@@ -74,4 +74,4 @@ export function parseQuery(search) {
   return { code: c && /^\d{8}$/.test(c) ? c : null, bin: b != null && /^[0-4]$/.test(b) ? Number(b) : null };   // bin 이 없으면 화면에서 DEFAULT_BIN 을 쓴다
 }
 export const buildQuery = (code, bin) => (code ? `?c=${code}${bin != null ? `&b=${bin}` : ""}` : "");
-export const shardOf = (code, n = 64) => Number(code) % n;
+export const shardOf = (code, n = 64) => (/^[0-9]+$/.test(code) ? Number(code) % n : parseInt(String(code).slice(1, 7), 16) % n);   // 사람인 전용 id(S+16진수)는 saramin.js 와 같은 규칙

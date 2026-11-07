@@ -1,9 +1,9 @@
-import { avatar, chrome, esc, getDetail, getJSON, getMeta } from "./common.js?v=e5fe82c4d7";
-import { getCorp } from "./corp.js?v=e5fe82c4d7";
-import { searchTop } from "./search.js?v=e5fe82c4d7";
-import { loadEntities, mountFinder } from "./finder-ui.js?v=e5fe82c4d7";
-import { getSaramin } from "./saramin.js?v=e5fe82c4d7";
-import { MAX_ITEMS, MIN_ITEMS, evaluateAll, fmtValue, fromCorp, fromEntity, fromWorkplace, parseItems, toQuery } from "./compare-core.js?v=e5fe82c4d7";
+import { avatar, chrome, esc, getDetail, getJSON, getMeta } from "./common.js?v=fe815e7e7c";
+import { getCorp } from "./corp.js?v=fe815e7e7c";
+import { searchTop } from "./search.js?v=fe815e7e7c";
+import { loadEntities, mountFinder } from "./finder-ui.js?v=fe815e7e7c";
+import { getSaramin } from "./saramin.js?v=fe815e7e7c";
+import { MAX_ITEMS, MIN_ITEMS, evaluateAll, fmtValue, fromCorp, fromEntity, fromWorkplace, parseItems, toQuery } from "./compare-core.js?v=fe815e7e7c";
 
 chrome("compare.html");
 const out = document.getElementById("out"), picks = document.getElementById("picks"), addwrap = document.getElementById("addwrap");

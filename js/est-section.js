@@ -1,10 +1,16 @@
 // PAY워치 연구용 미리보기: 기업 결과 화면(company.html?corp=코드)에 '근속 구간 집단의 평균급여 · 실험적 추정' 영역을 덧붙인다(연구용 빌드 전용; 공개 site/ 에는 이 파일이 없다).
 // 표시 기준(범위 산출·민감도 검토를 통과한 기업만): A 범위 / B 범위 + 간결한 주의 / C·D 영역 자체를 렌더링하지 않는다(데이터에도 범위가 없다).
 // 대표 범위는 확대 시나리오, 기본 시나리오는 접이식 상세. 기본 근속 구간은 5~10년(검색 직후 추가 클릭 없음).
-import { esc, getJSON } from "./common.js?v=e5fe82c4d7";
-import { BINS, BIN_LABEL, DEFAULT_BIN, WIDE, canEstimate, chartModel, fmtEok, fmtRange, gradeOf, isWide, reasonText, resolveBin, shardOf } from "./est-core.js?v=e5fe82c4d7";
+import { esc, getJSON } from "./common.js?v=fe815e7e7c";
+import { BINS, BIN_LABEL, DEFAULT_BIN, WIDE, canEstimate, chartModel, fmtEok, fmtRange, gradeOf, isWide, reasonText, resolveBin, shardOf } from "./est-core.js?v=fe815e7e7c";
 
-export async function getFirm(code) { const sh = await getJSON(`est/s/${shardOf(code)}.json`); return sh[code] || null; }
+// DART 기반 추정(est/s)이 우선. 없으면 사람인 평균연봉 기반 '산업 통계 기반 참고 추정'(est/sm, mt:"ind"). 둘 다 있는 기업은 DART 것만 쓴다(중복 계산 없음).
+export async function getFirm(code) {
+  const sh = await getJSON(`est/s/${shardOf(code)}.json`).catch(() => ({}));
+  if (sh[code]) return sh[code];
+  const sm = await getJSON(`est/sm/${shardOf(code)}.json`).catch(() => ({}));
+  return sm[code] || null;
+}
 
 function noteHtml(rec, bin) {
   if (!rec.cau && rec.g !== "B") return "";                                   // 주의 표시가 있는 기업(cau)만
@@ -62,15 +68,15 @@ export function pairHtml(rec, bin) {
 function sectionHtml(rec, bin) {
   const r = resolveBin(rec, bin);
   return `<section class="xp-sec" aria-labelledby="xr">
-    <p class="xp-flag"><span>연구용</span> 공식 공시값이 아닌 모형 추정입니다</p>
+    ${rec.mt === "ind" ? '<p class="xp-flag"><span>참고 추정</span> 사람인 평균연봉 + 산업 통계 기반 · 회사 내부 근속별 연봉을 확인한 값이 아닙니다</p>' : '<p class="xp-flag"><span>연구용</span> 공식 공시값이 아닌 모형 추정입니다</p>'}
     <h2 id="xr" class="xp-kicker">근속 구간 집단의 평균급여 · 실험적 추정</h2>
     ${tableHtml(rec, bin)}
     ${pairHtml(rec, bin)}
-    <p class="xp-cap">기본: 인력 구성만 반영 · 확대: 곡선 형태 변화까지 반영 · 개인 연봉이 아닌 집단 평균이며 정확도는 검증되지 않았습니다</p>
+    <p class="xp-cap">기본: 인력 구성만 반영 · 확대: 곡선 형태 변화까지 반영 · 개인 연봉이나 통계적 신뢰구간이 아니며 정확도는 검증되지 않았습니다</p>
     ${noteHtml(rec, bin)}
     <div class="xp-chartbox">${chartSvg(rec, bin)}<p class="xp-legend"><span class="sw base"></span>기본 <span class="sw exp"></span>확대 ${rec.a != null ? '<span class="sw avg"></span>기업 전체 평균(공시)' : ""}${(chartModel(rec, bin) || {}).zeroBased ? "" : " · 세로축은 0에서 시작하지 않음"}</p></div>
     <details class="xp-det"><summary>출처 · 추정 방법 · 주의사항</summary>
-      <p><b>출처</b>: 고용노동부 고용형태별노동실태조사 산업·근속 구간별 임금 + 이 회사의 DART 공시 평균급여·평균근속(${esc(rec.y || 2025)}년 기준, 모형 ${esc(rec.m || "")}).</p>
+      ${rec.mt === "ind" ? `<p><b>출처</b>: 고용노동부 고용형태별노동실태조사 산업·근속 구간별 임금 + 이 회사의 사람인 평균연봉(표시연도 ${esc(rec.y || "")}년, 공시값 아님). 이 회사의 평균근속·근속 구성은 알 수 없어 같은 업종 DART 기업의 평균근속 분포로 여러 시나리오를 가정했습니다(모형 ${esc(rec.m || "")}). 범위가 넓은 기업은 추정하지 않습니다.</p>` : `<p><b>출처</b>: 고용노동부 고용형태별노동실태조사 산업·근속 구간별 임금 + 이 회사의 DART 공시 평균급여·평균근속(${esc(rec.y || 2025)}년 기준, 모형 ${esc(rec.m || "")}).</p>`}
       ${methodHtml()}${cautionHtml(rec)}</details>
     </section>`;
 }
